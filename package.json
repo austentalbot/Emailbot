@@ -4,10 +4,15 @@
   "description": "A tool to automate sending out multiple similar emails",
   "main": "gulpfile.js",
   "dependencies": {
+    "body-parser": "^1.12.3",
     "browserify": "^9.0.8",
+    "btoa": "^1.1.2",
+    "cors": "^2.5.3",
+    "express": "^4.12.3",
     "gulp": "^3.8.11",
     "react": "^0.13.2",
     "reactify": "^1.1.0",
+    "request": "^2.55.0",
     "reqwest": "^1.1.5",
     "watchify": "^3.1.2"
   },
