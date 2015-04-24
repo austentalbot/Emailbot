@@ -1,0 +1,34 @@
+{
+  "name": "Emailbot",
+  "version": "0.0.0",
+  "description": "A tool to automate sending out multiple similar emails",
+  "main": "gulpfile.js",
+  "dependencies": {
+    "browserify": "^9.0.8",
+    "googleapis": "^2.0.2",
+    "gulp": "^3.8.11",
+    "react": "^0.13.2",
+    "reactify": "^1.1.0",
+    "watchify": "^3.1.2"
+  },
+  "devDependencies": {
+    "browserify": "^9.0.8",
+    "gulp": "^3.8.11",
+    "reactify": "^1.1.0",
+    "vinyl-source-stream": "^1.1.0",
+    "watchify": "^3.1.2"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/austentalbot/Emailbot.git"
+  },
+  "author": "Austen Talbot <austentalbot@gmail.com> (http://austentalbot.com/)",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/austentalbot/Emailbot/issues"
+  },
+  "homepage": "https://github.com/austentalbot/Emailbot"
+}
