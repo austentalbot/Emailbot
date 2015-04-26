@@ -1,5 +1,6 @@
 var google = require('googleapis');
 var OAuth2 = google.auth.OAuth2;
+var gmail = google.gmail;
 
 var credentials = require('./credentials.js');
 
@@ -18,4 +19,9 @@ var url = oauth2Client.generateAuthUrl({
   scope: scopes
 });
 
-module.exports.url = url;
+module.exports = {
+  gmail: gmail,
+  oauth: OAuth2,
+  client: oauth2Client,
+  url: url
+};

@@ -4,7 +4,7 @@ var bodyParser = require('body-parser');
 var request = require('request');
 var btoa = require('btoa');
 
-var goauth = require('./gmailOAuth.js');
+var gapi = require('./gmailOAuth.js');
 var credentials = require('./credentials.js');
 
 var port = process.env.PORT || 4417;
@@ -18,23 +18,67 @@ app.use(bodyParser.json());
 app.set('views', __dirname + '/views');
 app.set('view engine', 'jade');
 
+var email_lines = [];
+
+email_lines.push('From: "Austen Talbot" <austentalbot@gmail.com>');
+email_lines.push('To: austentalbot@gmail.com');
+email_lines.push('Content-type: text/html;charset=iso-8859-1');
+email_lines.push('MIME-Version: 1.0');
+email_lines.push('Subject: Gmail API test');
+email_lines.push('');
+email_lines.push('body text');
+email_lines.push('<b>And the bold text goes here</b>');
+
+var email = email_lines.join('\r\n').trim();
+
+var base64Message = new Buffer(email).toString('base64');
+base64Message = base64Message.replace(/\+/g, '-').replace(/\//g, '_')
+
 app.get('/', function(req, res) {
   var locals = {
     title: 'My sample app',
-    url: goauth.url
+    url: gapi.url
   };
   res.render('index.jade', locals);
 });
 
 app.get('/oauth2callback', function(req, res) {
   var code = req.query.code;
-  console.log(code);
+  gapi.client.getToken(code, function(err, tokens) {
+    console.log(tokens);
+    if(!err) {
+      gapi.client.setCredentials(tokens);
+      var gmail = gapi.gmail({ version: 'v1', auth: gapi.client });
+      gmail.users.messages.send({
+        auth: gapi.client,
+        userId: 'austentalbot@gmail.com',
+        resource: {
+          raw: base64Message
+        }
+      }, function(err, data, response) {
+        if (err) {
+          console.log('err', err);
+        }
+        console.log(data);
+      });
+    }
+  });
   var locals = {
     title: 'My sample app',
-    url: goauth.url
+    url: gapi.url
   };
   res.render('index.jade', locals);
 });
+
+var getData = function() {
+  gapi.oauth.userinfo.get().withAuthClient(gapi.client).execute(function(err, results){
+    console.log('err', err);
+    console.log(results);
+  });
+  // gapi.cal.calendarList.list().withAuthClient(gapi.client).execute(function(err, results){
+  //   console.log(results);
+  // });
+};
 
 // var message = {
 //   to: 'austentalbot@gmail.com',
