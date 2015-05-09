@@ -17,6 +17,7 @@ app.use(bodyParser.json());
 
 app.set('views', __dirname + '/views');
 app.set('view engine', 'jade');
+app.use(express.static(__dirname));
 
 var email_lines = [];
 
@@ -30,7 +31,7 @@ email_lines.push('body text');
 email_lines.push('<b>And the bold text goes here</b>');
 
 var email = email_lines.join('\r\n').trim();
-
+var gmail;
 var base64Message = new Buffer(email).toString('base64');
 base64Message = base64Message.replace(/\+/g, '-').replace(/\//g, '_')
 
@@ -39,7 +40,12 @@ app.get('/', function(req, res) {
     title: 'My sample app',
     url: gapi.url
   };
-  res.render('index.jade', locals);
+  res.render('./index.jade', locals);
+});
+
+app.get('/bundle.js', function(req, res){
+  console.log('bundle');
+  res.status(200).sendFile(__dirname + '/public/build/bundle.js');
 });
 
 app.get('/oauth2callback', function(req, res) {
@@ -48,26 +54,22 @@ app.get('/oauth2callback', function(req, res) {
     console.log(tokens);
     if(!err) {
       gapi.client.setCredentials(tokens);
-      var gmail = gapi.gmail({ version: 'v1', auth: gapi.client });
-      gmail.users.messages.send({
-        auth: gapi.client,
-        userId: 'austentalbot@gmail.com',
-        resource: {
-          raw: base64Message
-        }
-      }, function(err, data, response) {
-        if (err) {
-          console.log('err', err);
-        }
-        console.log(data);
-      });
+      gmail = gapi.gmail({ version: 'v1', auth: gapi.client });
+      // gmail.users.messages.send({
+      //   auth: gapi.client,
+      //   userId: 'austentalbot@gmail.com',
+      //   resource: {
+      //     raw: base64Message
+      //   }
+      // }, function(err, data, response) {
+      //   if (err) {
+      //     console.log('err', err);
+      //   }
+      //   console.log(data);
+      // });
     }
   });
-  var locals = {
-    title: 'My sample app',
-    url: gapi.url
-  };
-  res.render('index.jade', locals);
+  res.status(200).sendFile(__dirname + '/public/index.html');
 });
 
 var getData = function() {
