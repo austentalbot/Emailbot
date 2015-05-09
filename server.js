@@ -19,22 +19,6 @@ app.set('views', __dirname + '/views');
 app.set('view engine', 'jade');
 app.use(express.static(__dirname));
 
-var email_lines = [];
-
-email_lines.push('From: "Austen Talbot" <austentalbot@gmail.com>');
-email_lines.push('To: austentalbot@gmail.com');
-email_lines.push('Content-type: text/html;charset=iso-8859-1');
-email_lines.push('MIME-Version: 1.0');
-email_lines.push('Subject: Gmail API test');
-email_lines.push('');
-email_lines.push('body text');
-email_lines.push('<b>And the bold text goes here</b>');
-
-var email = email_lines.join('\r\n').trim();
-var gmail;
-var base64Message = new Buffer(email).toString('base64');
-base64Message = base64Message.replace(/\+/g, '-').replace(/\//g, '_')
-
 app.get('/', function(req, res) {
   var locals = {
     title: 'My sample app',
@@ -72,40 +56,23 @@ app.get('/oauth2callback', function(req, res) {
   res.status(200).sendFile(__dirname + '/public/index.html');
 });
 
-var getData = function() {
-  gapi.oauth.userinfo.get().withAuthClient(gapi.client).execute(function(err, results){
-    console.log('err', err);
-    console.log(results);
+app.post('/sendEmail', function(req, res) {
+  console.log(req.body);
+  var base64Message = req.body.base64Message;
+  gmail.users.messages.send({
+    auth: gapi.client,
+    userId: 'austentalbot@gmail.com', // can use "me" to signify authenticated user
+    resource: {
+      raw: base64Message
+    }
+  }, function(err, data, response) {
+    if (err) {
+      console.log('err', err);
+      res.status(501).send(err);
+    }
+    res.status(200).send('Email sent!');
   });
-  // gapi.cal.calendarList.list().withAuthClient(gapi.client).execute(function(err, results){
-  //   console.log(results);
-  // });
-};
-
-// var message = {
-//   to: 'austentalbot@gmail.com',
-//   from: 'austentalbot@gmail.com',
-//   subject: 'api test'
-// };
-
-// var base64Message = btoa(message);
-
-// var parameters = {
-//   method: 'POST',
-//   url: 'https://www.googleapis.com/gmail/v1/users/austentalbot%40gmail.com/messages/send?key='
-//     + credentials.key,
-//   formData: {
-//     raw: base64Message
-//   }
-// };
-
-// request(parameters, function(err, response, payload) {
-//   if (err) {
-//     console.log('err', err);
-//   }
-//   console.log('payload', payload);
-// });
-
+});
 
 var server = app.listen(port, function(){
   console.log('Server is listening on port ' + port);
