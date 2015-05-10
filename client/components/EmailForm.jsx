@@ -4,7 +4,7 @@ var reqwest = require('reqwest');
 
 var EmailForm = module.exports = React.createClass({
   generateEmailMessage: function() {
-    var recipient = document.getElementById('email-recipient').value;
+    var recipient = document.getElementById('email-variables-recipient').value;
     var subject = document.getElementById('email-subject').value;
     var message = document.getElementById('email-message').value;
 
@@ -43,41 +43,63 @@ var EmailForm = module.exports = React.createClass({
   },
   render: function() {
     return R('div', {
-      className: 'email-form',
+      className: 'email',
       children: [
         R('div', {
+          className: 'email-form',
           children: [
-            R('input', {
-              id: 'email-recipient',
-              className: 'email-form-recipient',
-              type: 'text',
-              placeholder: 'recipient'
-            })
+            R('div', {
+              children: [
+                R('input', {
+                  id: 'email-subject',
+                  className: 'email-form-subject',
+                  type: 'text',
+                  placeholder: 'subject'
+                })
+              ]
+            }),
+            R('div', {
+              children: [
+                R('textarea', {
+                  id: 'email-message',
+                  className: 'email-form-message',
+                  placeholder: 'message'
+                })
+              ]
+            }),
+            R('button', {
+              className: 'email-message-send-button button-primary',
+              onClick: this.onSendEmailClick
+            }, 'send an email')
           ]
         }),
         R('div', {
+          className: 'email-variables',
           children: [
-            R('input', {
-              id: 'email-subject',
-              className: 'email-form-subject',
-              type: 'text',
-              placeholder: 'subject'
+            R('div', {
+              children: [
+                R('input', {
+                  id: 'email-variables-recipient',
+                  className: 'email-variables-recipient',
+                  type: 'text',
+                  placeholder: 'recipient'
+                }),
+                R('input', {
+                  id: 'email-variables-key',
+                  className: 'email-variables-key',
+                  type: 'text',
+                  placeholder: 'key'
+                }),
+                R('input', {
+                  id: 'email-variables-value',
+                  className: 'email-variables-value',
+                  type: 'text',
+                  placeholder: 'value'
+                })
+              ]
             })
           ]
-        }),
-        R('div', {
-          children: [
-            R('textarea', {
-              id: 'email-message',
-              className: 'email-form-message',
-              placeholder: 'message'
-            })
-          ]
-        }),
-        R('button', {
-          className: 'email-message-send-button button-primary',
-          onClick: this.onSendEmailClick
-        }, 'send an email')
+        })
       ]
     })
   }
