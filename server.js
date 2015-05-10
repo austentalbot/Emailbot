@@ -39,18 +39,6 @@ app.get('/oauth2callback', function(req, res) {
     if(!err) {
       gapi.client.setCredentials(tokens);
       gmail = gapi.gmail({ version: 'v1', auth: gapi.client });
-      // gmail.users.messages.send({
-      //   auth: gapi.client,
-      //   userId: 'austentalbot@gmail.com',
-      //   resource: {
-      //     raw: base64Message
-      //   }
-      // }, function(err, data, response) {
-      //   if (err) {
-      //     console.log('err', err);
-      //   }
-      //   console.log(data);
-      // });
     }
   });
   res.status(200).sendFile(__dirname + '/public/index.html');
