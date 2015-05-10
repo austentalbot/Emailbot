@@ -3,7 +3,14 @@ var source = require('vinyl-source-stream'); // Used to stream bundle for furthe
 var browserify = require('browserify');
 var watchify = require('watchify');
 var reactify = require('reactify');
+var sass = require('gulp-sass');
  
+gulp.task('sass', function () {
+  gulp.src('./public/scss/*.scss')
+    .pipe(sass().on('error', sass.logError))
+    .pipe(gulp.dest('./public'));
+});
+
 gulp.task('browserify', function() {
   var bundler = browserify({
     entries: ['./client/app.jsx'],
@@ -27,4 +34,4 @@ gulp.task('browserify', function() {
   .pipe(gulp.dest('./public/build/'));
 });
 
-gulp.task('default', ['browserify']);
+gulp.task('default', ['browserify', 'sass']);

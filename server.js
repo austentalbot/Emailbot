@@ -32,6 +32,16 @@ app.get('/bundle.js', function(req, res){
   res.status(200).sendFile(__dirname + '/public/build/bundle.js');
 });
 
+app.get('/skeleton.css', function(req, res){
+  console.log('skeleton.css');
+  res.status(200).sendFile(__dirname + '/public/skeleton.css');
+});
+
+app.get('/style.css', function(req, res){
+  console.log('style.css');
+  res.status(200).sendFile(__dirname + '/public/style.css');
+});
+
 app.get('/oauth2callback', function(req, res) {
   var code = req.query.code;
   gapi.client.getToken(code, function(err, tokens) {

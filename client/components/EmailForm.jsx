@@ -9,7 +9,6 @@ var EmailForm = module.exports = React.createClass({
     var message = document.getElementById('email-message').value;
 
     var email_lines = [];
-    // email_lines.push('From: "Austen Talbot" <austentalbot@gmail.com>');
     email_lines.push('To: ' + recipient);
     email_lines.push('Content-type: text/html;charset=iso-8859-1');
     email_lines.push('MIME-Version: 1.0');
@@ -46,25 +45,37 @@ var EmailForm = module.exports = React.createClass({
     return R('div', {
       className: 'email-form',
       children: [
-        R('input', {
-          id: 'email-recipient',
-          className: 'email-form-recipient',
-          type: 'text',
-          placeholder: 'recipient'
+        R('div', {
+          children: [
+            R('input', {
+              id: 'email-recipient',
+              className: 'email-form-recipient',
+              type: 'text',
+              placeholder: 'recipient'
+            })
+          ]
         }),
-        R('input', {
-          id: 'email-subject',
-          className: 'email-form-subject',
-          type: 'text',
-          placeholder: 'subject'
+        R('div', {
+          children: [
+            R('input', {
+              id: 'email-subject',
+              className: 'email-form-subject',
+              type: 'text',
+              placeholder: 'subject'
+            })
+          ]
         }),
-        R('input', {
-          id: 'email-message',
-          className: 'email-form-message',
-          type: 'text',
-          placeholder: 'message'
+        R('div', {
+          children: [
+            R('textarea', {
+              id: 'email-message',
+              className: 'email-form-message',
+              placeholder: 'message'
+            })
+          ]
         }),
         R('button', {
+          className: 'email-message-send-button button-primary',
           onClick: this.onSendEmailClick
         }, 'send an email')
       ]
