@@ -4,9 +4,14 @@ var reqwest = require('reqwest');
 
 var EmailForm = module.exports = React.createClass({
   generateEmailMessage: function() {
-    var recipient = document.getElementById('email-variables-recipient').value;
     var subject = document.getElementById('email-subject').value;
-    var message = document.getElementById('email-message').value;
+    var messageTemplate = document.getElementById('email-message').value;
+    var recipient = document.getElementById('email-variables-recipient').value;
+    var key = document.getElementById('email-variables-key').value;
+    var value = document.getElementById('email-variables-value').value;
+
+    var re = new RegExp('{' + key + '}', 'g');
+    var fullMessage = messageTemplate.replace(re, value);
 
     var email_lines = [];
     email_lines.push('To: ' + recipient);
@@ -14,7 +19,7 @@ var EmailForm = module.exports = React.createClass({
     email_lines.push('MIME-Version: 1.0');
     email_lines.push('Subject: ' + subject);
     email_lines.push('');
-    email_lines.push(message);
+    email_lines.push(fullMessage);
 
     var email = email_lines.join('\r\n').trim();
     var gmail;
