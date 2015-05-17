@@ -1,0 +1,12 @@
+.email {
+  display: flex; }
+  .email .email-form .email-form-subject, .email .email-form .email-form-message {
+    width: 250px; }
+  .email .email-form .email-form-message {
+    height: 100px; }
+  .email .email-variables {
+    margin-left: 10px; }
+    .email .email-variables input {
+      margin-left: 5px; }
+  .email .email-recipient-container {
+    margin-left: 152px; }

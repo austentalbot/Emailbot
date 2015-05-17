@@ -5,11 +5,14 @@ var reqwest = require('reqwest');
 var EmailForm = module.exports = React.createClass({
   getInitialState: function() {
     return {
-      people: 1,
+      recipients: 1,
       variables: 1
     };
   },
-  generateEmailMessage: function() {
+  generateAndSendAllMessages: function() {
+    //loop over all recipients
+  },
+  sendEmailMessage: function() {
     var subject = document.getElementById('email-subject').value;
     var message = document.getElementById('email-message').value;
     var recipient = document.getElementById('email-variables-recipient').value;
@@ -48,7 +51,7 @@ var EmailForm = module.exports = React.createClass({
       url: 'http://localhost:4417/sendEmail',
       method: 'post',
       data: {
-        base64Message: that.generateEmailMessage()
+        base64Message: that.sendEmailMessage()
       },
       error: function(err) {
         console.log(err);
@@ -61,26 +64,63 @@ var EmailForm = module.exports = React.createClass({
   onAddVariableClick: function() {
     this.setState({variables: this.state.variables + 1});
   },
+  onAddRecipientClick: function() {
+    this.setState({recipients: this.state.recipients + 1});
+  },
   render: function() {
-    var keyValPairs = [];
+    var that = this;
+    var keysAndAllVals = function(pairNum) {
+      var keysAndVals = [
+        R('input', {
+          id: 'email-variables-key' + pairNum,
+          className: 'email-variables-key',
+          type: 'text',
+          placeholder: 'key'
+        })
+      ];
+      for (var j = 0; j < that.state.recipients; j++) {
+        keysAndVals.push(
+          R('input', {
+            id: 'email-variables-value' + pairNum + 'recipient' + j,
+            className: 'email-variables-value',
+            type: 'text',
+            placeholder: 'value'
+          })
+        );
+      }
+      return keysAndVals;
+    };
+    var keyValSets = [];
     for (var i = 0; i < this.state.variables; i++) {
-      keyValPairs.push(
+      keyValSets.push(
         R('div', {
           className: 'email-variables-pair' + i,
-          children: [
-            R('input', {
-              id: 'email-variables-key' + i,
-              className: 'email-variables-key',
-              type: 'text',
-              placeholder: 'key'
-            }),
-            R('input', {
-              id: 'email-variables-value' + i,
-              className: 'email-variables-value',
-              type: 'text',
-              placeholder: 'value'
-            })
-          ]
+          // children: [
+          //   R('input', {
+          //     id: 'email-variables-key' + i,
+          //     className: 'email-variables-key',
+          //     type: 'text',
+          //     placeholder: 'key'
+          //   }),
+          //   R('input', {
+          //     id: 'email-variables-value' + i,
+          //     className: 'email-variables-value',
+          //     type: 'text',
+          //     placeholder: 'value'
+          //   })
+          // ]
+          children: keysAndAllVals(i)
+        })
+      );
+    }
+    var recipientInputs = [];
+    for (var i = 0; i < this.state.recipients; i++) {
+      recipientInputs.push(
+        R('input', {
+          id: 'email-variables-recipient' + i,
+          className: 'email-variables-recipient' + i,
+          type: 'text',
+          placeholder: 'recipient'
         })
       );
     }
@@ -120,22 +160,26 @@ var EmailForm = module.exports = React.createClass({
           children: [
             R('div', {
               children: [
-                R('input', {
-                  id: 'email-variables-recipient',
-                  className: 'email-variables-recipient',
-                  type: 'text',
-                  placeholder: 'recipient'
+                R('div', {
+                  id: 'email-recipient-container',
+                  className: 'email-recipient-container',
+                  children: recipientInputs
                 }),
                 R('div', {
                   id: 'email-variables-container',
                   className: 'email-variables-container',
-                  children: keyValPairs
+                  children: keyValSets
                 }),
                 R('button', {
-                  id: 'email-variables-add-button',
-                  className: 'email-variables-add-button',
+                  id: 'email-variables-add-var-button',
+                  className: 'email-variables-add-var-button',
                   onClick: this.onAddVariableClick
-                }, 'Add')
+                }, 'Add variable'),
+                R('button', {
+                  id: 'email-variables-add-recipient-button',
+                  className: 'email-variables-add-recipient-button',
+                  onClick: this.onAddRecipientClick
+                }, 'Add recipient')
               ]
             })
           ]
