@@ -65,6 +65,14 @@ var EmailForm = module.exports = React.createClass({
   onAddRecipientClick: function() {
     this.setState({recipients: this.state.recipients + 1});
   },
+  onClearClick: function() {
+    this.setState({recipients: 1, variables: 1});
+    document.getElementById('email-subject').value = '';
+    document.getElementById('email-message').value = '';
+    document.getElementById('email-variables-key0').value = '';
+    document.getElementById('email-variables-value0recipient0').value = '';
+    document.getElementById('email-variables-recipient0').value = '';
+  },
   render: function() {
     var that = this;
     var keysAndAllVals = function(pairNum) {
@@ -112,31 +120,43 @@ var EmailForm = module.exports = React.createClass({
       className: 'email',
       children: [
         R('div', {
-          className: 'email-form',
+          className: 'email-message',
           children: [
             R('div', {
+              className: 'email-form',
               children: [
-                R('input', {
-                  id: 'email-subject',
-                  className: 'email-form-subject',
-                  type: 'text',
-                  placeholder: 'subject'
-                })
+                R('div', {
+                  children: [
+                    R('input', {
+                      id: 'email-subject',
+                      className: 'email-form-subject',
+                      type: 'text',
+                      placeholder: 'subject'
+                    })
+                  ]
+                }),
+                R('div', {
+                  children: [
+                    R('textarea', {
+                      id: 'email-message',
+                      className: 'email-form-message',
+                      placeholder: 'message'
+                    })
+                  ]
+                }),
+                R('button', {
+                  className: 'email-message-send-button button-primary',
+                  onClick: this.onSendEmailClick
+                }, 'send emails')
               ]
             }),
             R('div', {
+              className: 'email-directions',
               children: [
-                R('textarea', {
-                  id: 'email-message',
-                  className: 'email-form-message',
-                  placeholder: 'message'
-                })
+                R('div', {className: 'email-directions-header'}, 'Directions:'),
+                R('div', {}, 'Write a message with variables wrapped in handlebars (e.g. Hello {name}, how have you been?). Add more recipients and variables, and specify values for each combination.')
               ]
-            }),
-            R('button', {
-              className: 'email-message-send-button button-primary',
-              onClick: this.onSendEmailClick
-            }, 'send an email')
+            })
           ]
         }),
         R('div', {
@@ -144,16 +164,6 @@ var EmailForm = module.exports = React.createClass({
           children: [
             R('div', {
               children: [
-                R('div', {
-                  id: 'email-recipient-container',
-                  className: 'email-recipient-container',
-                  children: recipientInputs
-                }),
-                R('div', {
-                  id: 'email-variables-container',
-                  className: 'email-variables-container',
-                  children: keyValSets
-                }),
                 R('button', {
                   id: 'email-variables-add-var-button',
                   className: 'email-variables-add-var-button',
@@ -163,7 +173,22 @@ var EmailForm = module.exports = React.createClass({
                   id: 'email-variables-add-recipient-button',
                   className: 'email-variables-add-recipient-button',
                   onClick: this.onAddRecipientClick
-                }, 'Add recipient')
+                }, 'Add recipient'),
+                R('button', {
+                  id: 'email-variables-clear-button',
+                  className: 'email-variables-clear-button',
+                  onClick: this.onClearClick
+                }, 'Clear'),
+                R('div', {
+                  id: 'email-recipient-container',
+                  className: 'email-recipient-container',
+                  children: recipientInputs
+                }),
+                R('div', {
+                  id: 'email-variables-container',
+                  className: 'email-variables-container',
+                  children: keyValSets
+                })
               ]
             })
           ]

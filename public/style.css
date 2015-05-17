@@ -1,12 +1,22 @@
 .email {
-  display: flex; }
-  .email .email-form .email-form-subject, .email .email-form .email-form-message {
-    width: 250px; }
-  .email .email-form .email-form-message {
-    height: 100px; }
-  .email .email-variables {
-    margin-left: 10px; }
-    .email .email-variables input {
-      margin-left: 5px; }
+  margin-left: 10px; }
+  .email .email-message {
+    display: flex; }
+    .email .email-message .email-form .email-form-subject, .email .email-message .email-form .email-form-message {
+      width: 400px; }
+    .email .email-message .email-form .email-form-message {
+      height: 100px; }
+    .email .email-message .email-directions {
+      margin-left: 10px;
+      width: 450px;
+      font-size: 11px;
+      color: gray; }
+      .email .email-message .email-directions .email-directions-header {
+        font-size: 12px;
+        font-weight: bold; }
+  .email .email-variables input {
+    margin-left: 5px; }
+  .email .email-variables button {
+    margin-right: 5px; }
   .email .email-recipient-container {
     margin-left: 152px; }

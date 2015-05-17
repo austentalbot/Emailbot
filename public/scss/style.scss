@@ -1,17 +1,32 @@
 .email {
-  display: flex;
-  .email-form {
-    .email-form-subject, .email-form-message {
-      width: 250px;
+  margin-left: 10px;
+  .email-message {
+    display: flex;
+    .email-form {
+      .email-form-subject, .email-form-message {
+        width: 400px;
+      }
+      .email-form-message {
+        height: 100px;
+      }
     }
-    .email-form-message {
-      height: 100px;
+    .email-directions {
+      margin-left: 10px;
+      width: 450px;
+      font-size: 11px;
+      color: gray;
+      .email-directions-header {
+        font-size: 12px;
+        font-weight: bold;
+      }
     }
   }
   .email-variables {
-    margin-left: 10px;
     input {
       margin-left: 5px;
+    }
+    button {
+      margin-right: 5px;
     }
   }
   .email-recipient-container {
