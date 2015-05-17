@@ -9,19 +9,16 @@ var EmailForm = module.exports = React.createClass({
       variables: 1
     };
   },
-  generateAndSendAllMessages: function() {
-    //loop over all recipients
-  },
-  sendEmailMessage: function() {
+  sendEmailMessage: function(recipientNum) {
     var subject = document.getElementById('email-subject').value;
     var message = document.getElementById('email-message').value;
-    var recipient = document.getElementById('email-variables-recipient').value;
+    var recipient = document.getElementById('email-variables-recipient' + recipientNum).value;
 
     // loop over all key value pairs
     var key, value, re;
     for (var i = 0; i < this.state.variables; i++) {
       key = document.getElementById('email-variables-key' + i).value;
-      value = document.getElementById('email-variables-value' + i).value;
+      value = document.getElementById('email-variables-value' + i + 'recipient' + recipientNum).value;
       re = new RegExp('{' + key + '}', 'g');
       message = message.replace(re, value);
     }
@@ -45,21 +42,22 @@ var EmailForm = module.exports = React.createClass({
   },
   onSendEmailClick: function() {
     var that = this;
-    
-    console.log('reqwesting');
-    reqwest({
-      url: 'http://localhost:4417/sendEmail',
-      method: 'post',
-      data: {
-        base64Message: that.sendEmailMessage()
-      },
-      error: function(err) {
-        console.log(err);
-      },
-      success: function (resp) {
-        console.log(resp);
-      }
-    });
+    for (var i = 0; i < this.state.recipients; i++) {
+      console.log('reqwesting') + i;
+      reqwest({
+        url: 'http://localhost:4417/sendEmail',
+        method: 'post',
+        data: {
+          base64Message: that.sendEmailMessage(i)
+        },
+        error: function(err) {
+          console.log(err);
+        },
+        success: function (resp) {
+          console.log(resp);
+        }
+      });
+    }
   },
   onAddVariableClick: function() {
     this.setState({variables: this.state.variables + 1});
@@ -95,20 +93,6 @@ var EmailForm = module.exports = React.createClass({
       keyValSets.push(
         R('div', {
           className: 'email-variables-pair' + i,
-          // children: [
-          //   R('input', {
-          //     id: 'email-variables-key' + i,
-          //     className: 'email-variables-key',
-          //     type: 'text',
-          //     placeholder: 'key'
-          //   }),
-          //   R('input', {
-          //     id: 'email-variables-value' + i,
-          //     className: 'email-variables-value',
-          //     type: 'text',
-          //     placeholder: 'value'
-          //   })
-          // ]
           children: keysAndAllVals(i)
         })
       );
